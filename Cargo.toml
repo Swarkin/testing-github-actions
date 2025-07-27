@@ -1,0 +1,52 @@
+[package]
+name = "walkers-editor"
+version = "0.1.0"
+authors = ["Swarkin"]
+edition = "2024"
+description = "Editor for OpenStreetMap data"
+readme = "README.md"
+homepage = "https://swarkin.dev/walkers-editor"
+repository = "https://github.com/Swarkin/walkers-editor"
+license = "MIT"
+keywords = ["openstreetmap", "osm", "egui", "wasm"]
+categories = ["gui", "graphics", "wasm"]
+build = "build.rs"
+
+[features]
+debug = []
+
+[dependencies]
+walkers = "0.43.0"
+eframe = { version = "0.32", default-features = false, features = ["glow", "default_fonts"] }
+egui_extras = { version = "0.32", default-features = false, features = ["svg", "syntect"] }
+serde = { version = "1", features = ["derive"] }
+quick-xml = { version = "0.38", features = ["serialize"] }
+crossbeam-channel = "0.5"
+osm-parser = { version = "4.1", features = ["rustc_hash"], git = "https://github.com/Swarkin/osm-parser.git" }
+webmercator_tiles = "1.0"
+lyon_tessellation = "1.0"
+rustc-hash = "2.1.1"
+indexmap = "2.10"
+rstar = "0.12"
+
+[target.'cfg(target_family = "unix")'.dependencies]
+eframe = { version = "0.32", default-features = false, features = ["glow", "default_fonts", "wayland", "x11"] }
+
+[target.'cfg(not(target_family = "wasm"))'.dependencies]
+ureq = { version = "3.0", default-features = false, features = ["rustls", "json", "gzip"] }
+
+[target.'cfg(target_family = "wasm")'.dependencies]
+ehttp = { version = "0.5", default-features = false, features = ["json"] }
+web-sys = "0.3"
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+futures = "0.3"
+log = "0.4"
+
+[build-dependencies]
+winresource = "0.1"
+
+[profile.release]
+opt-level = 3
+strip = true
+lto = true
